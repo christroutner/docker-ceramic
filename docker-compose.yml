@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  ipfs:
+    image: ceramicnetwork/ipfs-daemon:latest
+    container_name: ipfs
+    environment:
+      CERAMIC_NETWORK: "testnet-clay"
+    ports:
+      - 4011:4011
+      - 5011:5011
+    restart: always
+
+  ceramic:
+    image: ceramicnetwork/js-ceramic:latest
+    container_name: ceramic
+    links:
+      - ipfs
+    volumes:
+      - ./daemon.config.json:/root/.ceramic/daemon.config.json
+      - ./logs:/root/.ceramic/logs
+      - ./statestore:/root/.ceramic/statestore
+    ports:
+      - 7007:7007
+
